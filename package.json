@@ -1,0 +1,20 @@
+{
+  "name": "punchcards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "approve": "npx playwright test approve-punchcards-single.spec.ts --project=chromium",
+    "approve:headed": "npx playwright test approve-punchcards-single.spec.ts --project=chromium --headed",
+    "approve:debug": "npx playwright test approve-punchcards-single.spec.ts --project=chromium --debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0",
+    "dotenv": "^16.4.7"
+  }
+}
