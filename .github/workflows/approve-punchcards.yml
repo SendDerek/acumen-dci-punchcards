@@ -1,9 +1,9 @@
 name: Approve Punch Cards (Employer)
 
 on:
-  # Run every Friday at 5:00 PM UTC (12:00 PM EST / 9:00 AM PST)
+  # Run every Saturday at 5:00 PM UTC (10:00 AM MST)
   schedule:
-    - cron: '0 17 * * 5'
+    - cron: '0 17 * * 6'
 
   # Allow manual triggering
   workflow_dispatch:

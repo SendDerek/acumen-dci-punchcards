@@ -90,14 +90,14 @@ git push -u origin main
 #### Workflow Schedules
 
 **Submit Punch Cards** (`.github/workflows/submit-punchcards.yml`):
-- **Automatic**: Every Monday at 9:00 AM UTC
+- **Automatic**: Every Saturday at 4:00 PM UTC (9:00 AM MST)
 - **Purpose**: Submits punch cards for the previous week (Monday-Friday)
 - **Manual trigger**: Go to Actions → Submit Punch Cards → Run workflow
   - Optional: Specify custom date range
 
 **Approve Punch Cards** (`.github/workflows/approve-punchcards.yml`):
-- **Automatic**: Every Friday at 5:00 PM UTC
-- **Purpose**: Approves all pending punch cards
+- **Automatic**: Every Saturday at 5:00 PM UTC (10:00 AM MST)
+- **Purpose**: Approves all pending punch cards (runs 1 hour after submission)
 - **Manual trigger**: Go to Actions → Approve Punch Cards → Run workflow
 
 #### Viewing Workflow Results

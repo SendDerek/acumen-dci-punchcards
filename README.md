@@ -43,8 +43,8 @@ npm run approve
 
 This project includes GitHub Actions workflows for automated execution:
 
-- **Monday 9 AM UTC**: Submit previous week's punch cards
-- **Friday 5 PM UTC**: Approve pending punch cards
+- **Saturday 9 AM MST** (4 PM UTC): Submit previous week's punch cards
+- **Saturday 10 AM MST** (5 PM UTC): Approve pending punch cards
 
 #### Setup
 

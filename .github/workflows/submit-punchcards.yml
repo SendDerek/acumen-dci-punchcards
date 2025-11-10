@@ -1,9 +1,9 @@
 name: Submit Punch Cards (Employee)
 
 on:
-  # Run every Monday at 9:00 AM UTC (4:00 AM EST / 1:00 AM PST)
+  # Run every Saturday at 4:00 PM UTC (9:00 AM MST)
   schedule:
-    - cron: '0 9 * * 1'
+    - cron: '0 16 * * 6'
 
   # Allow manual triggering
   workflow_dispatch:
