@@ -108,15 +108,17 @@ This project includes GitHub Actions workflows for automated execution:
 
 #### Email Notifications (Optional)
 
-Get notified by email when workflows fail:
+Get notified by email when workflows complete (both success and failure):
 
 1. Go to [GitHub Notification Settings](https://github.com/settings/notifications)
 2. Scroll to the **"Actions"** section
-3. Check **"Send notifications for failed workflows only"**
+3. Under "Participating, @mentions and custom", make sure **"Email"** is checked
 4. Ensure your notification email is set under "Notification email"
 5. Go to your repository and click **"Watch"** → **"Custom"** → enable **"Workflow runs"**
 
-You'll receive an email if a workflow fails, so if you don't get an email, everything ran successfully!
+You'll receive an email each Saturday morning confirming the workflows completed successfully (or notifying you if they failed)!
+
+**Note**: If you only want failure notifications, check **"Send notifications for failed workflows only"** in step 3 instead.
 
 See [CLAUDE.md](CLAUDE.md) for complete documentation.
 
