@@ -1,0 +1,56 @@
+name: Submit Punch Cards (Employee)
+
+on:
+  # Run every Monday at 9:00 AM UTC (4:00 AM EST / 1:00 AM PST)
+  schedule:
+    - cron: '0 9 * * 1'
+
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      start_date:
+        description: 'Start date (MM/DD/YYYY) - leave empty for previous week'
+        required: false
+        type: string
+      end_date:
+        description: 'End date (MM/DD/YYYY) - leave empty for previous week'
+        required: false
+        type: string
+
+jobs:
+  submit-punchcards:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Submit punch cards
+        env:
+          ACUMEN_EMPLOYEE_USERNAME: ${{ secrets.ACUMEN_EMPLOYEE_USERNAME }}
+          ACUMEN_EMPLOYEE_PASSWORD: ${{ secrets.ACUMEN_EMPLOYEE_PASSWORD }}
+          START_DATE: ${{ inputs.start_date }}
+          END_DATE: ${{ inputs.end_date }}
+        run: npm run submit
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-submit
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30

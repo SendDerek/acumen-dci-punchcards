@@ -1,0 +1,45 @@
+name: Approve Punch Cards (Employer)
+
+on:
+  # Run every Friday at 5:00 PM UTC (12:00 PM EST / 9:00 AM PST)
+  schedule:
+    - cron: '0 17 * * 5'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  approve-punchcards:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Approve pending punch cards
+        env:
+          ACUMEN_EMPLOYER_USERNAME: ${{ secrets.ACUMEN_EMPLOYER_USERNAME }}
+          ACUMEN_EMPLOYER_PASSWORD: ${{ secrets.ACUMEN_EMPLOYER_PASSWORD }}
+        run: npm run approve
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-approve
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30

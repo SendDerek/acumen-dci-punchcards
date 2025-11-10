@@ -33,7 +33,7 @@ ACUMEN_EMPLOYEE_USERNAME=heather_username
 ACUMEN_EMPLOYEE_PASSWORD=heather_password
 ```
 
-### Running the Automations
+### Running Locally
 
 **Employer Side - Approve Punch Cards:**
 ```bash
@@ -64,6 +64,56 @@ npm run submit:headed
 # Debug mode
 npm run submit:debug
 ```
+
+### Automated Scheduling (GitHub Actions)
+
+The repository includes GitHub Actions workflows for automated punch card processing:
+
+#### Setup GitHub Actions
+
+1. **Push repository to GitHub** (if not already):
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/punchcards.git
+git branch -M main
+git push -u origin main
+```
+
+2. **Configure GitHub Secrets**:
+   - Go to your repository on GitHub
+   - Navigate to Settings → Secrets and variables → Actions
+   - Click "New repository secret" and add each of the following:
+     - `ACUMEN_EMPLOYER_USERNAME` - Your employer username
+     - `ACUMEN_EMPLOYER_PASSWORD` - Your employer password
+     - `ACUMEN_EMPLOYEE_USERNAME` - Employee (Heather's) username
+     - `ACUMEN_EMPLOYEE_PASSWORD` - Employee (Heather's) password
+
+#### Workflow Schedules
+
+**Submit Punch Cards** (`.github/workflows/submit-punchcards.yml`):
+- **Automatic**: Every Monday at 9:00 AM UTC
+- **Purpose**: Submits punch cards for the previous week (Monday-Friday)
+- **Manual trigger**: Go to Actions → Submit Punch Cards → Run workflow
+  - Optional: Specify custom date range
+
+**Approve Punch Cards** (`.github/workflows/approve-punchcards.yml`):
+- **Automatic**: Every Friday at 5:00 PM UTC
+- **Purpose**: Approves all pending punch cards
+- **Manual trigger**: Go to Actions → Approve Punch Cards → Run workflow
+
+#### Viewing Workflow Results
+
+1. Go to the "Actions" tab in your GitHub repository
+2. Click on the workflow run you want to inspect
+3. View logs, download artifacts (on failure), and check status
+
+#### Manual Workflow Execution
+
+To manually run a workflow:
+1. Go to Actions tab
+2. Select the workflow (Submit or Approve)
+3. Click "Run workflow" button
+4. For submit workflow: optionally enter START_DATE and END_DATE
+5. Click "Run workflow"
 
 ## Automation Workflows
 
