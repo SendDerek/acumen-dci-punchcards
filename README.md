@@ -2,6 +2,24 @@
 
 Automated Playwright scripts for managing Acumen DCI punch card submissions and approvals.
 
+## Why This Exists
+
+This project was created to simplify the administrative requirements of family caregiving under state waiver programs. Our son, who has Down syndrome, is enrolled in Montana's 208 Waiver program, which enables him to receive care at home. Under this program, I serve as the employer of record, and my wife serves as his paid caregiver.
+
+While the Acumen DCI system serves an important purpose in program compliance and documentation, the manual process of submitting and approving time entries each week can be time-consuming. After several months of managing these administrative tasks manually, we developed this automation to reduce the repetitive data entry burden, allowing us to focus more time on what matters most: caring for our son.
+
+This tool may be helpful for other families in similar situations who are navigating employer-of-record arrangements in state waiver programs.
+
+## Disclaimer
+
+This software is provided "as-is" for automation of legitimate administrative tasks. Users are responsible for:
+- Ensuring compliance with their program's policies and requirements
+- Verifying the accuracy of all submitted information
+- Maintaining appropriate records as required by their program
+- Understanding that automation does not replace oversight and review
+
+**Use at your own risk.** The authors assume no liability for any issues arising from the use of this software.
+
 ## Overview
 
 This project automates two workflows:
