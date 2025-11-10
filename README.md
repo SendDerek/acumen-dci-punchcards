@@ -106,6 +106,18 @@ This project includes GitHub Actions workflows for automated execution:
    - `ACUMEN_EMPLOYEE_USERNAME`
    - `ACUMEN_EMPLOYEE_PASSWORD`
 
+#### Email Notifications (Optional)
+
+Get notified by email when workflows fail:
+
+1. Go to [GitHub Notification Settings](https://github.com/settings/notifications)
+2. Scroll to the **"Actions"** section
+3. Check **"Send notifications for failed workflows only"**
+4. Ensure your notification email is set under "Notification email"
+5. Go to your repository and click **"Watch"** → **"Custom"** → enable **"Workflow runs"**
+
+You'll receive an email if a workflow fails, so if you don't get an email, everything ran successfully!
+
 See [CLAUDE.md](CLAUDE.md) for complete documentation.
 
 ## Scripts
