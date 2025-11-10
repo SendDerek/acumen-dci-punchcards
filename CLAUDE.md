@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Playwright automation project designed to automate the approval of punch cards for Heather at Acumen powered by DCI. The project uses TypeScript and Playwright to interact with the punch card approval system.
+This is a Playwright automation project designed to automate the submission and approval of punch cards at Acumen powered by DCI. The project uses TypeScript and Playwright to interact with the punch card system for both employee submissions and employer approvals.
 
 **Target URL**: https://acumen.dcisoftware.com/Mobile/Entry/PendingEntries
 
@@ -128,7 +128,7 @@ The automation script (`approve-punchcards-single.spec.ts`) performs the followi
 2. **Navigate to Pending Entries**:
    - Clicks the hamburger menu in the top right
    - Selects "Pending Entries" from the menu
-   - Counts all pending entries for "HILDRETH HEATHER"
+   - Counts all pending entries for the employee
 
 3. **Approve Each Entry**:
    - Clicks on the first pending entry
@@ -158,10 +158,10 @@ The automation script (`submit-punchcards.spec.ts`) performs the following steps
 3. **For Each Date**:
    - Opens hamburger menu and selects "New Entry"
    - Fills out the punch card form:
-     - Client: Types "Kaden" and selects first autocomplete result (HILDRETH KADEN - MT2801)
+     - Client: Types the client name and selects the autocomplete result
      - Date: Enters the date being processed (MM/DD/YYYY)
-     - Check In: 3:30 PM
-     - Check Out: 7:30 PM
+     - Check In: Configured time (default: 3:30 PM)
+     - Check Out: Configured time (default: 7:30 PM)
      - Adds reason: "Forgot to Clock In"
      - Adds reason: "Forgot to Clock Out"
    - Clicks Save (`#btnSubmitTransactionForm`)
@@ -226,9 +226,9 @@ npx playwright codegen
   - **Employee Credentials**: `ACUMEN_EMPLOYEE_USERNAME` and `ACUMEN_EMPLOYEE_PASSWORD` - Used for submitting punch cards
   - **Date Range (Optional)**: `START_DATE` and `END_DATE` - Control which dates the employee-side automation processes
 - **Single Session Pattern**: Both automations perform login and actions in a single browser session for reliability
-- **Target Employee/Client**:
-  - Employer-side: Approves entries for "HILDRETH HEATHER"
-  - Employee-side: Submits entries for client "HILDRETH KADEN - MT2801"
+- **Target Employee/Client**: The scripts are configured for a specific employee and client. Update the scripts to match your employee name and client details:
+  - Employer-side: Approves entries for the specified employee
+  - Employee-side: Submits entries for the specified client
 - **Dual-Side Design**: Complete automation system covering both:
   - **Employer**: Approve pending punch cards (weekly)
   - **Employee**: Submit punch card entries for date ranges (weekly, with weekday filtering)
@@ -264,7 +264,7 @@ If buttons or elements can't be found:
 ### Employee Submission Issues
 
 If the employee-side automation fails:
-- **Client autocomplete**: If "Kaden" doesn't autocomplete, increase the wait time in the script
+- **Client autocomplete**: If the client name doesn't autocomplete correctly, increase the wait time in the script or verify the client name is correct
 - **Date format**: Ensure dates are in MM/DD/YYYY format
 - **Weekend dates**: The script automatically skips weekends, so check the console output to see which dates are being processed
 - **Form validation**: Run with `npm run submit:headed` to see if any form fields have validation errors
