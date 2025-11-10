@@ -10,6 +10,39 @@ While the Acumen DCI system serves an important purpose in program compliance an
 
 This tool may be helpful for other families in similar situations who are navigating employer-of-record arrangements in state waiver programs.
 
+## For Other Families: Simple Setup Guide
+
+If you're in a similar situation with state waiver programs and want to automate your punch card submissions, here's what this tool does in simple terms:
+
+**What does this do?**
+- Every Saturday morning, it automatically fills out your weekly punch cards (just like you would do manually)
+- Then it automatically approves those punch cards (if you're the employer)
+- You don't have to remember to do it every week - it runs on its own
+
+**Do I need to know how to code?**
+No! While this project involves code, you don't need to understand it. However, you will need:
+- A GitHub account (free)
+- About 30 minutes to set it up the first time
+- Your Acumen DCI login credentials
+
+**How do I get started?**
+
+1. **Contact me for help**: I'm happy to help other families set this up for free. Reach out to me via GitHub at [@SendDerek](https://github.com/SendDerek) and I'll walk you through it step by step.
+
+2. **What I'll help you with**:
+   - Creating a copy of this project for your family
+   - Setting up your login credentials securely
+   - Configuring the times and dates that work for you
+   - Making sure everything runs correctly
+   - Troubleshooting if anything goes wrong
+
+3. **Is it safe?**
+   - Your login credentials are stored securely in GitHub (not in the code itself)
+   - The automation runs in the cloud, not on your computer
+   - It only does exactly what you would do manually - nothing more
+
+**Questions?** Feel free to open an issue on this GitHub repository or contact me directly. I'm here to help other families dealing with the same administrative challenges.
+
 ## Disclaimer
 
 This software is provided "as-is" for automation of legitimate administrative tasks. Users are responsible for:
