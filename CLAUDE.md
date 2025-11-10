@@ -28,9 +28,9 @@ cp .env.example .env
 ACUMEN_EMPLOYER_USERNAME=your_employer_username
 ACUMEN_EMPLOYER_PASSWORD=your_employer_password
 
-# Employee credentials (for Heather to submit punch cards)
-ACUMEN_EMPLOYEE_USERNAME=heather_username
-ACUMEN_EMPLOYEE_PASSWORD=heather_password
+# Employee credentials (for submitting punch cards)
+ACUMEN_EMPLOYEE_USERNAME=your_employee_username
+ACUMEN_EMPLOYEE_PASSWORD=your_employee_password
 ```
 
 ### Running Locally
@@ -73,7 +73,7 @@ The repository includes GitHub Actions workflows for automated punch card proces
 
 1. **Push repository to GitHub** (if not already):
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/punchcards.git
+git remote add origin https://github.com/YOUR_USERNAME/acumen-dci-punchcards.git
 git branch -M main
 git push -u origin main
 ```
@@ -84,8 +84,8 @@ git push -u origin main
    - Click "New repository secret" and add each of the following:
      - `ACUMEN_EMPLOYER_USERNAME` - Your employer username
      - `ACUMEN_EMPLOYER_PASSWORD` - Your employer password
-     - `ACUMEN_EMPLOYEE_USERNAME` - Employee (Heather's) username
-     - `ACUMEN_EMPLOYEE_PASSWORD` - Employee (Heather's) password
+     - `ACUMEN_EMPLOYEE_USERNAME` - Employee username
+     - `ACUMEN_EMPLOYEE_PASSWORD` - Employee password
 
 #### Workflow Schedules
 

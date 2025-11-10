@@ -1,7 +1,7 @@
 {
-  "name": "punchcards",
+  "name": "acumen-dci-punchcards",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automated Playwright scripts for Acumen DCI punch card submissions and approvals",
   "main": "index.js",
   "scripts": {
     "approve": "npx playwright test approve-punchcards-single.spec.ts --project=chromium",

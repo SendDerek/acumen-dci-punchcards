@@ -1,4 +1,4 @@
-# Punchcards Automation
+# Acumen DCI Punchcards Automation
 
 Automated Playwright scripts for managing Acumen DCI punch card submissions and approvals.
 
@@ -26,8 +26,8 @@ cp .env.example .env
 ```env
 ACUMEN_EMPLOYER_USERNAME=your_employer_username
 ACUMEN_EMPLOYER_PASSWORD=your_employer_password
-ACUMEN_EMPLOYEE_USERNAME=heather_username
-ACUMEN_EMPLOYEE_PASSWORD=heather_password
+ACUMEN_EMPLOYEE_USERNAME=your_employee_username
+ACUMEN_EMPLOYEE_PASSWORD=your_employee_password
 ```
 
 4. **Run scripts**:
