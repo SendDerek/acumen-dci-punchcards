@@ -22,16 +22,20 @@ npm install
 cp .env.example .env
 ```
 
-3. Edit `.env` and add your Acumen employer credentials:
+3. Edit `.env` and add your Acumen credentials:
 ```
-ACUMEN_EMPLOYER_USERNAME=your_username
-ACUMEN_EMPLOYER_PASSWORD=your_password
+# Employer credentials (for approving punch cards)
+ACUMEN_EMPLOYER_USERNAME=your_employer_username
+ACUMEN_EMPLOYER_PASSWORD=your_employer_password
+
+# Employee credentials (for Heather to submit punch cards)
+ACUMEN_EMPLOYEE_USERNAME=heather_username
+ACUMEN_EMPLOYEE_PASSWORD=heather_password
 ```
 
-Note: Employee credentials (for Heather) can be added later for employee-side automation.
+### Running the Automations
 
-### Running the Automation
-
+**Employer Side - Approve Punch Cards:**
 ```bash
 # Approve all pending punch cards (headless mode)
 npm run approve
@@ -43,12 +47,32 @@ npm run approve:headed
 npm run approve:debug
 ```
 
-## Automation Workflow
+**Employee Side - Submit Punch Cards:**
+```bash
+# Submit punch cards for previous week (Monday-Friday)
+npm run submit
+
+# Submit for a specific date
+START_DATE=11/04/2025 npm run submit
+
+# Submit for a date range
+START_DATE=11/04/2025 END_DATE=11/08/2025 npm run submit
+
+# Run with visible browser (watch it work)
+npm run submit:headed
+
+# Debug mode
+npm run submit:debug
+```
+
+## Automation Workflows
+
+### Employer Side - Approve Punch Cards
 
 The automation script (`approve-punchcards-single.spec.ts`) performs the following steps in a single browser session:
 
 1. **Authentication**:
-   - Logs in to the Acumen portal using credentials from `.env`
+   - Logs in to the Acumen portal using employer credentials from `.env`
    - Waits for successful login and verifies by checking for "News Posts" heading
 
 2. **Navigate to Pending Entries**:
@@ -58,14 +82,43 @@ The automation script (`approve-punchcards-single.spec.ts`) performs the followi
 
 3. **Approve Each Entry**:
    - Clicks on the first pending entry
-   - Clicks the "Approve" button
-   - Confirms approval by clicking "Yes" in the dialog
+   - Clicks the "Approve" button (`#btnApprovePunch`)
+   - Confirms approval by clicking "Yes" (`#btnSubmitApprove`)
    - Verifies the entry is marked as "Approved"
-   - Clicks "Back" to return to the list
+   - Returns to pending entries via hamburger menu
    - Repeats until all entries are approved
 
 4. **Completion**:
    - Reports the total number of entries approved with formatted output
+
+### Employee Side - Submit Punch Cards
+
+The automation script (`submit-punchcards.spec.ts`) performs the following steps:
+
+1. **Date Calculation**:
+   - By default: Calculates previous week's Monday-Friday dates
+   - With `START_DATE`: Processes single date (if weekday)
+   - With `START_DATE` and `END_DATE`: Processes all weekdays in range
+   - Always skips weekends (Saturday/Sunday)
+
+2. **Authentication**:
+   - Logs in to the Acumen portal using employee credentials from `.env`
+   - Waits for successful login
+
+3. **For Each Date**:
+   - Opens hamburger menu and selects "New Entry"
+   - Fills out the punch card form:
+     - Client: Types "Kaden" and selects first autocomplete result (HILDRETH KADEN - MT2801)
+     - Date: Enters the date being processed (MM/DD/YYYY)
+     - Check In: 3:30 PM
+     - Check Out: 7:30 PM
+     - Adds reason: "Forgot to Clock In"
+     - Adds reason: "Forgot to Clock Out"
+   - Clicks Save (`#btnSubmitTransactionForm`)
+   - Waits for submission to complete
+
+4. **Completion**:
+   - Reports the total number of entries submitted with formatted output
 
 ## Development Commands
 
@@ -95,10 +148,11 @@ npx playwright codegen
 
 ### Key Files
 
-- **`approve-punchcards-single.spec.ts`**: Main automation script that handles login and approves all pending punch cards in a single browser session
+- **`approve-punchcards-single.spec.ts`**: Employer-side automation that approves all pending punch cards
+- **`submit-punchcards.spec.ts`**: Employee-side automation that submits punch card entries for a date range
 - **`example.spec.ts`**: Sample Playwright test (can be removed if not needed)
 - **`playwright.config.ts`**: Playwright configuration
-- **`.env`**: Contains credentials (not in git, must be created from `.env.example`)
+- **`.env`**: Contains credentials for both employer and employee (not in git, must be created from `.env.example`)
 
 ## Project Configuration
 
@@ -119,10 +173,20 @@ npx playwright codegen
 - **TypeScript**: Project uses TypeScript for type safety
 - **Environment Variables**: Managed with `dotenv` package, loaded in test files
   - **Employer Credentials**: `ACUMEN_EMPLOYER_USERNAME` and `ACUMEN_EMPLOYER_PASSWORD` - Used for approving punch cards
-  - **Employee Credentials**: `ACUMEN_EMPLOYEE_USERNAME` and `ACUMEN_EMPLOYEE_PASSWORD` - Reserved for future employee-side automation (Heather submitting punch cards)
-- **Single Session Pattern**: The automation performs login and approval in a single browser session for reliability
-- **Target Employee**: Current automation specifically looks for and approves entries for "HILDRETH HEATHER"
-- **Dual-Side Design**: Project is structured to support both employer-side (approval) and employee-side (submission) automation
+  - **Employee Credentials**: `ACUMEN_EMPLOYEE_USERNAME` and `ACUMEN_EMPLOYEE_PASSWORD` - Used for submitting punch cards
+  - **Date Range (Optional)**: `START_DATE` and `END_DATE` - Control which dates the employee-side automation processes
+- **Single Session Pattern**: Both automations perform login and actions in a single browser session for reliability
+- **Target Employee/Client**:
+  - Employer-side: Approves entries for "HILDRETH HEATHER"
+  - Employee-side: Submits entries for client "HILDRETH KADEN - MT2801"
+- **Dual-Side Design**: Complete automation system covering both:
+  - **Employer**: Approve pending punch cards (weekly)
+  - **Employee**: Submit punch card entries for date ranges (weekly, with weekday filtering)
+- **Date Handling**:
+  - Employee automation calculates previous week's Monday-Friday dates by default
+  - Automatically skips weekends (Saturday/Sunday)
+  - Supports custom date ranges via environment variables
+- **Time Consistency**: Employee entries always use 3:30 PM - 7:30 PM shift
 
 ## Troubleshooting
 
@@ -146,3 +210,12 @@ If buttons or elements can't be found:
 - Use `npx playwright codegen` to generate new selectors
 - Inspect the page and update the locators in the script
 - The site may have been updated; check the current HTML structure
+
+### Employee Submission Issues
+
+If the employee-side automation fails:
+- **Client autocomplete**: If "Kaden" doesn't autocomplete, increase the wait time in the script
+- **Date format**: Ensure dates are in MM/DD/YYYY format
+- **Weekend dates**: The script automatically skips weekends, so check the console output to see which dates are being processed
+- **Form validation**: Run with `npm run submit:headed` to see if any form fields have validation errors
+- **Previous week calculation**: The script calculates Monday-Friday of the previous week. If today is Tuesday, it will process Monday-Friday of last week.

@@ -6,7 +6,10 @@
   "scripts": {
     "approve": "npx playwright test approve-punchcards-single.spec.ts --project=chromium",
     "approve:headed": "npx playwright test approve-punchcards-single.spec.ts --project=chromium --headed",
-    "approve:debug": "npx playwright test approve-punchcards-single.spec.ts --project=chromium --debug"
+    "approve:debug": "npx playwright test approve-punchcards-single.spec.ts --project=chromium --debug",
+    "submit": "npx playwright test submit-punchcards.spec.ts --project=chromium",
+    "submit:headed": "npx playwright test submit-punchcards.spec.ts --project=chromium --headed",
+    "submit:debug": "npx playwright test submit-punchcards.spec.ts --project=chromium --debug"
   },
   "keywords": [],
   "author": "",
