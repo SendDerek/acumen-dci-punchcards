@@ -27,7 +27,7 @@ No! While this project involves code, you don't need to understand it. However, 
 
 **How do I get started?**
 
-1. **Contact me for help**: I'm happy to help other families set this up for free. Reach out to me via GitHub at [@SendDerek](https://github.com/SendDerek) and I'll walk you through it step by step.
+1. **Contact me for help**: I'm happy to help other families set this up for free. Email me at **sendderek@gmail.com** and I'll walk you through it step by step.
 
 2. **What I'll help you with**:
    - Creating a copy of this project for your family
@@ -37,11 +37,11 @@ No! While this project involves code, you don't need to understand it. However, 
    - Troubleshooting if anything goes wrong
 
 3. **Is it safe?**
-   - Your login credentials are stored securely in GitHub (not in the code itself)
+   - Your login credentials are stored securely online (not in the code itself)
    - The automation runs in the cloud, not on your computer
    - It only does exactly what you would do manually - nothing more
 
-**Questions?** Feel free to open an issue on this GitHub repository or contact me directly. I'm here to help other families dealing with the same administrative challenges.
+**Questions?** Email me at **sendderek@gmail.com** - I'm here to help other families dealing with the same administrative challenges.
 
 ## Disclaimer
 
