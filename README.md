@@ -27,7 +27,7 @@ No! While this project involves code, you don't need to understand it. However, 
 
 **How do I get started?**
 
-1. **Contact me for help**: I'm happy to help other families set this up for free. Email me at **sendderek@gmail.com** and I'll walk you through it step by step.
+1. **Contact me for help**: I'm happy to help other families set this up for free. **[Click here to send me a message](https://github.com/SendDerek/acumen-dci-punchcards/issues/new?title=Help%20Request%3A%20Setup%20Assistance&body=Hi%20Derek%2C%0A%0AI%27m%20interested%20in%20setting%20up%20this%20automation%20for%20my%20family.%0A%0A**My%20situation%3A**%0A-%20State%2FProgram%3A%20%0A-%20Currently%20using%20Acumen%20DCI%3A%20Yes%20%2F%20No%0A%0A**Best%20way%20to%20contact%20me%3A**%0A-%20Email%3A%20%0A-%20Phone%20%28optional%29%3A%20%0A%0A**Questions%20or%20concerns%3A**%0A%0A)** and I'll walk you through it step by step.
 
 2. **What I'll help you with**:
    - Creating a copy of this project for your family
@@ -41,7 +41,7 @@ No! While this project involves code, you don't need to understand it. However, 
    - The automation runs in the cloud, not on your computer
    - It only does exactly what you would do manually - nothing more
 
-**Questions?** Email me at **sendderek@gmail.com** - I'm here to help other families dealing with the same administrative challenges.
+**Questions?** **[Click here to send me a message](https://github.com/SendDerek/acumen-dci-punchcards/issues/new?title=Question%20about%20Acumen%20DCI%20Automation&body=Hi%20Derek%2C%0A%0AI%20have%20a%20question%3A%0A%0A)** - I'm here to help other families dealing with the same administrative challenges.
 
 ## Disclaimer
 
