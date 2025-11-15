@@ -49,7 +49,7 @@ npm run approve:debug
 
 **Employee Side - Submit Punch Cards:**
 ```bash
-# Submit punch cards for previous week (Monday-Friday)
+# Submit punch cards for current/most recent week (Monday-Friday)
 npm run submit
 
 # Submit for a specific date
@@ -91,7 +91,7 @@ git push -u origin main
 
 **Submit Punch Cards** (`.github/workflows/submit-punchcards.yml`):
 - **Automatic**: Every Saturday at 4:00 PM UTC (9:00 AM MST)
-- **Purpose**: Submits punch cards for the previous week (Monday-Friday)
+- **Purpose**: Submits punch cards for the current week (Monday-Friday)
 - **Manual trigger**: Go to Actions → Submit Punch Cards → Run workflow
   - Optional: Specify custom date range
 
@@ -146,7 +146,7 @@ The automation script (`approve-punchcards-single.spec.ts`) performs the followi
 The automation script (`submit-punchcards.spec.ts`) performs the following steps:
 
 1. **Date Calculation**:
-   - By default: Calculates previous week's Monday-Friday dates
+   - By default: Calculates current/most recent week's Monday-Friday dates
    - With `START_DATE`: Processes single date (if weekday)
    - With `START_DATE` and `END_DATE`: Processes all weekdays in range
    - Always skips weekends (Saturday/Sunday)
@@ -233,7 +233,7 @@ npx playwright codegen
   - **Employer**: Approve pending punch cards (weekly)
   - **Employee**: Submit punch card entries for date ranges (weekly, with weekday filtering)
 - **Date Handling**:
-  - Employee automation calculates previous week's Monday-Friday dates by default
+  - Employee automation calculates current/most recent week's Monday-Friday dates by default
   - Automatically skips weekends (Saturday/Sunday)
   - Supports custom date ranges via environment variables
 - **Time Consistency**: Employee entries always use 3:30 PM - 7:30 PM shift
@@ -268,4 +268,4 @@ If the employee-side automation fails:
 - **Date format**: Ensure dates are in MM/DD/YYYY format
 - **Weekend dates**: The script automatically skips weekends, so check the console output to see which dates are being processed
 - **Form validation**: Run with `npm run submit:headed` to see if any form fields have validation errors
-- **Previous week calculation**: The script calculates Monday-Friday of the previous week. If today is Tuesday, it will process Monday-Friday of last week.
+- **Week calculation**: The script calculates Monday-Friday of the current/most recent week. If today is Saturday, it will process Monday-Friday of the current week. If today is Sunday, it will process Monday-Friday of the week that just ended.

@@ -9,11 +9,13 @@ function getPreviousWeekDates(): Date[] {
   const dates: Date[] = [];
   const today = new Date();
 
-  // Get last Monday (start of previous week)
+  // Get Monday of the current/most recent week
   const dayOfWeek = today.getDay();
-  const daysToLastMonday = dayOfWeek === 0 ? 8 : dayOfWeek + 6; // If Sunday, go back 8 days; otherwise dayOfWeek + 6
+  // If Sunday (0), go back 6 days to get last Monday
+  // Otherwise, go back (dayOfWeek - 1) days to get to Monday of current week
+  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
   const lastMonday = new Date(today);
-  lastMonday.setDate(today.getDate() - daysToLastMonday);
+  lastMonday.setDate(today.getDate() - daysToMonday);
 
   // Add Monday through Friday
   for (let i = 0; i < 5; i++) {
@@ -89,9 +91,9 @@ test.describe('Punch Card Submission Automation', () => {
         datesToProcess = [];
       }
     } else {
-      // Default: previous week (Monday-Friday)
+      // Default: current/most recent week (Monday-Friday)
       datesToProcess = getPreviousWeekDates();
-      console.log('Processing previous week (Monday-Friday)');
+      console.log('Processing current/most recent week (Monday-Friday)');
     }
 
     if (datesToProcess.length === 0) {
