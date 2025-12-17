@@ -58,6 +58,47 @@ function parseDate(dateStr: string): Date {
   return new Date(year, month - 1, day);
 }
 
+// Helper function to check for and handle announcement splash screen
+async function handleAnnouncementIfPresent(page: import('@playwright/test').Page): Promise<void> {
+  // Check if the OK button exists (indicates an announcement is present)
+  const okButton = page.locator('#btnACK');
+  const isAnnouncementPresent = await okButton.isVisible({ timeout: 2000 }).catch(() => false);
+
+  if (isAnnouncementPresent) {
+    console.log('\n╔══════════════════════════════════════════════════════════════════╗');
+    console.log('║                    📢 SYSTEM ANNOUNCEMENT                        ║');
+    console.log('╠══════════════════════════════════════════════════════════════════╣');
+
+    // Extract the announcement content from the splash carousel
+    const carousel = page.locator('#splashCarousel');
+    const announcementText = await carousel.textContent().catch(() => 'Unable to extract announcement text');
+
+    // Clean up and format the text for logging
+    const cleanedText = announcementText?.trim().replace(/\s+/g, ' ') || 'No content found';
+
+    // Log the announcement with word wrapping for readability
+    const words = cleanedText.split(' ');
+    let line = '║ ';
+    for (const word of words) {
+      if (line.length + word.length > 68) {
+        console.log(line.padEnd(69) + '║');
+        line = '║ ';
+      }
+      line += word + ' ';
+    }
+    if (line.trim() !== '║') {
+      console.log(line.padEnd(69) + '║');
+    }
+
+    console.log('╚══════════════════════════════════════════════════════════════════╝\n');
+
+    // Click OK to dismiss the announcement
+    await okButton.click();
+    await page.waitForTimeout(500);
+    console.log('✓ Announcement acknowledged');
+  }
+}
+
 test.describe('Punch Card Submission Automation', () => {
   test('submit punch cards for employee', async ({ page }) => {
     // Set a longer timeout for this test (10 minutes for multiple entries)
@@ -114,11 +155,16 @@ test.describe('Punch Card Submission Automation', () => {
 
     // Wait for successful login
     await page.waitForURL(/.*\/Mobile\/MobileHome/, { timeout: 10000 });
+
+    // Check for and handle any system announcements
+    await handleAnnouncementIfPresent(page);
+
     await expect(page.getByRole('heading', { name: 'News Posts' })).toBeVisible({ timeout: 5000 });
     console.log('✓ Login successful!');
 
     // Step 2: Process each date
     let successCount = 0;
+    let skippedCount = 0;
 
     for (let i = 0; i < datesToProcess.length; i++) {
       const date = datesToProcess[i];
@@ -184,8 +230,36 @@ test.describe('Punch Card Submission Automation', () => {
       // Click Save
       console.log('    • Clicking Save...');
       await page.locator('#btnSubmitTransactionForm').click();
-      await page.waitForTimeout(500); // Wait for modal to appear
+      await page.waitForTimeout(500); // Wait for response
 
+      // Check for error messages before proceeding
+      const errorElement = page.locator('#lblErrorMaxMIN');
+      const hasError = await errorElement.isVisible().catch(() => false);
+
+      if (hasError) {
+        const errorText = await errorElement.textContent() || 'Unknown error';
+
+        // Check if it's a duplicate/overlapping punch error (safe to skip)
+        if (errorText.includes('duplicate or overlapping punch')) {
+          console.log('  ⚠ SKIPPED: Duplicate entry already exists for this date');
+          console.log(`    Error: ${errorText.substring(0, 100)}...`);
+          skippedCount++;
+
+          // Navigate away via hamburger menu (avoids multiple Cancel button ambiguity)
+          await page.locator('#menu-button').click();
+          await page.waitForTimeout(500);
+
+          // Continue to next date
+          continue;
+        } else {
+          // Unknown error - fail the test
+          console.error('  ✖ ERROR: Unexpected error encountered');
+          console.error(`    ${errorText}`);
+          throw new Error(`Submission failed: ${errorText}`);
+        }
+      }
+
+      // No error - proceed with confirmation
       // Click Yes on the confirmation modal
       console.log('    • Confirming submission...');
       await page.getByRole('button', { name: 'Yes' }).click();
@@ -202,6 +276,9 @@ test.describe('Punch Card Submission Automation', () => {
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`✓ Automation complete!`);
     console.log(`  Submitted: ${successCount} of ${datesToProcess.length} entries`);
+    if (skippedCount > 0) {
+      console.log(`  Skipped:   ${skippedCount} (duplicates already existed)`);
+    }
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
   });
 });

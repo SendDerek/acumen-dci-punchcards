@@ -4,6 +4,47 @@ import * as dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
+// Helper function to check for and handle announcement splash screen
+async function handleAnnouncementIfPresent(page: import('@playwright/test').Page): Promise<void> {
+  // Check if the OK button exists (indicates an announcement is present)
+  const okButton = page.locator('#btnACK');
+  const isAnnouncementPresent = await okButton.isVisible({ timeout: 2000 }).catch(() => false);
+
+  if (isAnnouncementPresent) {
+    console.log('\n╔══════════════════════════════════════════════════════════════════╗');
+    console.log('║                    📢 SYSTEM ANNOUNCEMENT                        ║');
+    console.log('╠══════════════════════════════════════════════════════════════════╣');
+
+    // Extract the announcement content from the splash carousel
+    const carousel = page.locator('#splashCarousel');
+    const announcementText = await carousel.textContent().catch(() => 'Unable to extract announcement text');
+
+    // Clean up and format the text for logging
+    const cleanedText = announcementText?.trim().replace(/\s+/g, ' ') || 'No content found';
+
+    // Log the announcement with word wrapping for readability
+    const words = cleanedText.split(' ');
+    let line = '║ ';
+    for (const word of words) {
+      if (line.length + word.length > 68) {
+        console.log(line.padEnd(69) + '║');
+        line = '║ ';
+      }
+      line += word + ' ';
+    }
+    if (line.trim() !== '║') {
+      console.log(line.padEnd(69) + '║');
+    }
+
+    console.log('╚══════════════════════════════════════════════════════════════════╝\n');
+
+    // Click OK to dismiss the announcement
+    await okButton.click();
+    await page.waitForTimeout(500);
+    console.log('✓ Announcement acknowledged');
+  }
+}
+
 test.describe('Punch Card Approval Automation', () => {
   test('login and approve all pending punch cards for Heather', async ({ page }) => {
     // Set a longer timeout for this test (10 minutes for many entries)
@@ -26,6 +67,10 @@ test.describe('Punch Card Approval Automation', () => {
 
     // Wait for successful login
     await page.waitForURL(/.*\/Mobile\/MobileHome/, { timeout: 10000 });
+
+    // Check for and handle any system announcements
+    await handleAnnouncementIfPresent(page);
+
     await expect(page.getByRole('heading', { name: 'News Posts' })).toBeVisible({ timeout: 5000 });
     console.log('✓ Login successful!');
 
