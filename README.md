@@ -90,6 +90,26 @@ npm run submit
 npm run approve
 ```
 
+### Custom Date Ranges
+
+By default, `npm run submit` processes the current/most recent week (Monday-Friday). You can specify custom dates using environment variables:
+
+```bash
+# Single date
+START_DATE=11/04/2025 npm run submit
+
+# Date range
+START_DATE=11/04/2025 END_DATE=11/08/2025 npm run submit
+
+# With visible browser
+START_DATE=11/04/2025 END_DATE=11/08/2025 npm run submit:headed
+```
+
+**Notes:**
+- Dates must be in `MM/DD/YYYY` format
+- Weekends (Saturday/Sunday) are automatically skipped
+- On Windows, use PowerShell: `$env:START_DATE="11/04/2025"; npm run submit`
+
 ### Automated Scheduling
 
 This project includes GitHub Actions workflows for automated execution:
