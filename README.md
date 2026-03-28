@@ -66,6 +66,7 @@ This project automates two workflows:
 1. **Install dependencies**:
 ```bash
 npm install
+npx playwright install
 ```
 
 2. **Create `.env` file**:
