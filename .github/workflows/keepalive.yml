@@ -1,0 +1,29 @@
+name: Keepalive
+
+on:
+  # Run every 50 days (well before the 60-day timeout)
+  schedule:
+    - cron: '0 12 1,21 * *'  # 1st and 21st of each month at noon UTC
+
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update keepalive timestamp
+        run: date -u > .github/.keepalive
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/.keepalive
+          git diff --cached --quiet || git commit -m "chore: keepalive [skip ci]" && git push
