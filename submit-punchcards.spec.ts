@@ -162,120 +162,131 @@ test.describe('Punch Card Submission Automation', () => {
     await expect(page.getByRole('heading', { name: 'News Posts' })).toBeVisible({ timeout: 5000 });
     console.log('✓ Login successful!');
 
-    // Step 2: Process each date
+    // Step 2: Process each date with two time slots per day
+    const timeSlots = [
+      { checkIn: '6:30 AM', checkOut: '7:30 AM' },
+      { checkIn: '3:30 PM', checkOut: '6:30 PM' },
+    ];
+    const totalEntries = datesToProcess.length * timeSlots.length;
     let successCount = 0;
     let skippedCount = 0;
+    let entryNumber = 0;
 
     for (let i = 0; i < datesToProcess.length; i++) {
       const date = datesToProcess[i];
       const formattedDate = formatDate(date);
 
       console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-      console.log(`Processing ${i + 1}/${datesToProcess.length}: ${formattedDate}`);
+      console.log(`Processing date ${i + 1}/${datesToProcess.length}: ${formattedDate}`);
 
-      // Navigate to New Entry via hamburger menu
-      console.log('  → Opening hamburger menu...');
-      await page.locator('#menu-button').click();
-      await page.waitForTimeout(500);
+      for (const slot of timeSlots) {
+        entryNumber++;
+        console.log(`\n  ── Entry ${entryNumber}/${totalEntries}: ${slot.checkIn} - ${slot.checkOut} ──`);
 
-      console.log('  → Clicking New Entry...');
-      await page.locator('a[href="/Mobile/Entry/AddEntry"]').click();
-      await page.waitForLoadState('load');
-      await page.waitForTimeout(500);
+        // Navigate to New Entry via hamburger menu
+        console.log('  → Opening hamburger menu...');
+        await page.locator('#menu-button').click();
+        await page.waitForTimeout(500);
 
-      // Fill out the form
-      console.log('  → Filling out form...');
+        console.log('  → Clicking New Entry...');
+        await page.locator('a[href="/Mobile/Entry/AddEntry"]').click();
+        await page.waitForLoadState('load');
+        await page.waitForTimeout(500);
 
-      // Type client name and wait for autocomplete
-      console.log('    • Typing client name "Kaden"...');
-      const clientInput = page.locator('#txtClientAccount');
-      await clientInput.fill('Kaden');
+        // Fill out the form
+        console.log('  → Filling out form...');
 
-      // Wait for autocomplete dropdown to appear with actual content
-      console.log('    • Waiting for autocomplete dropdown...');
-      await page.locator('.ui-menu-item-wrapper:has-text("HILDRETH KADEN")').waitFor({ state: 'visible', timeout: 5000 });
-      await page.waitForTimeout(500); // Brief pause for dropdown to fully render
+        // Type client name and wait for autocomplete
+        console.log('    • Typing client name "Kaden"...');
+        const clientInput = page.locator('#txtClientAccount');
+        await clientInput.fill('Kaden');
 
-      // Click the first item in the autocomplete dropdown
-      console.log('    • Selecting "HILDRETH KADEN - MT2801"...');
-      await page.locator('.ui-menu-item-wrapper:has-text("HILDRETH KADEN")').first().click();
-      await page.waitForTimeout(500);
+        // Wait for autocomplete dropdown to appear with actual content
+        console.log('    • Waiting for autocomplete dropdown...');
+        await page.locator('.ui-menu-item-wrapper:has-text("HILDRETH KADEN")').waitFor({ state: 'visible', timeout: 5000 });
+        await page.waitForTimeout(500); // Brief pause for dropdown to fully render
 
-      // Enter date
-      console.log(`    • Entering date: ${formattedDate}...`);
-      await page.locator('#PunchDate').fill(formattedDate);
+        // Click the first item in the autocomplete dropdown
+        console.log('    • Selecting "HILDRETH KADEN - MT2801"...');
+        await page.locator('.ui-menu-item-wrapper:has-text("HILDRETH KADEN")').first().click();
+        await page.waitForTimeout(500);
 
-      // Enter check in time
-      console.log('    • Entering check in time: 3:30 PM...');
-      await page.locator('#PunchInTime').clear();
-      await page.locator('#PunchInTime').fill('3:30 PM');
+        // Enter date
+        console.log(`    • Entering date: ${formattedDate}...`);
+        await page.locator('#PunchDate').fill(formattedDate);
 
-      // Enter check out time
-      console.log('    • Entering check out time: 7:30 PM...');
-      await page.locator('#PunchOutTime').clear();
-      await page.locator('#PunchOutTime').fill('7:30 PM');
+        // Enter check in time
+        console.log(`    • Entering check in time: ${slot.checkIn}...`);
+        await page.locator('#PunchInTime').clear();
+        await page.locator('#PunchInTime').fill(slot.checkIn);
 
-      // Select "Forgot to Clock In" reason and click Add
-      console.log('    • Adding "Forgot to Clock In" reason...');
-      await page.locator('#drpCustomReason').selectOption({ label: 'Forgot to Clock In' });
-      await page.locator('i.fa-plus-circle.add-icon').first().click();
-      await page.waitForTimeout(500);
+        // Enter check out time
+        console.log(`    • Entering check out time: ${slot.checkOut}...`);
+        await page.locator('#PunchOutTime').clear();
+        await page.locator('#PunchOutTime').fill(slot.checkOut);
 
-      // Select "Forgot to Clock Out" reason and click Add
-      console.log('    • Adding "Forgot to Clock Out" reason...');
-      await page.locator('#drpCustomReason').selectOption({ label: 'Forgot to Clock Out' });
-      await page.locator('i.fa-plus-circle.add-icon').first().click();
-      await page.waitForTimeout(500);
+        // Select "Forgot to Clock In" reason and click Add
+        console.log('    • Adding "Forgot to Clock In" reason...');
+        await page.locator('#drpCustomReason').selectOption({ label: 'Forgot to Clock In' });
+        await page.locator('i.fa-plus-circle.add-icon').first().click();
+        await page.waitForTimeout(500);
 
-      // Click Save
-      console.log('    • Clicking Save...');
-      await page.locator('#btnSubmitTransactionForm').click();
-      await page.waitForTimeout(500); // Wait for response
+        // Select "Forgot to Clock Out" reason and click Add
+        console.log('    • Adding "Forgot to Clock Out" reason...');
+        await page.locator('#drpCustomReason').selectOption({ label: 'Forgot to Clock Out' });
+        await page.locator('i.fa-plus-circle.add-icon').first().click();
+        await page.waitForTimeout(500);
 
-      // Check for error messages before proceeding
-      const errorElement = page.locator('#lblErrorMaxMIN');
-      const hasError = await errorElement.isVisible().catch(() => false);
+        // Click Save
+        console.log('    • Clicking Save...');
+        await page.locator('#btnSubmitTransactionForm').click();
+        await page.waitForTimeout(500); // Wait for response
 
-      if (hasError) {
-        const errorText = await errorElement.textContent() || 'Unknown error';
+        // Check for error messages before proceeding
+        const errorElement = page.locator('#lblErrorMaxMIN');
+        const hasError = await errorElement.isVisible().catch(() => false);
 
-        // Check if it's a duplicate/overlapping punch error (safe to skip)
-        if (errorText.includes('duplicate or overlapping punch')) {
-          console.log('  ⚠ SKIPPED: Duplicate entry already exists for this date');
-          console.log(`    Error: ${errorText.substring(0, 100)}...`);
-          skippedCount++;
+        if (hasError) {
+          const errorText = await errorElement.textContent() || 'Unknown error';
 
-          // Navigate away via hamburger menu (avoids multiple Cancel button ambiguity)
-          await page.locator('#menu-button').click();
-          await page.waitForTimeout(500);
+          // Check if it's a duplicate/overlapping punch error (safe to skip)
+          if (errorText.includes('duplicate or overlapping punch')) {
+            console.log(`  ⚠ SKIPPED: Duplicate entry already exists for ${slot.checkIn} - ${slot.checkOut}`);
+            console.log(`    Error: ${errorText.substring(0, 100)}...`);
+            skippedCount++;
 
-          // Continue to next date
-          continue;
-        } else {
-          // Unknown error - fail the test
-          console.error('  ✖ ERROR: Unexpected error encountered');
-          console.error(`    ${errorText}`);
-          throw new Error(`Submission failed: ${errorText}`);
+            // Navigate away via hamburger menu (avoids multiple Cancel button ambiguity)
+            await page.locator('#menu-button').click();
+            await page.waitForTimeout(500);
+
+            // Continue to next time slot
+            continue;
+          } else {
+            // Unknown error - fail the test
+            console.error('  ✖ ERROR: Unexpected error encountered');
+            console.error(`    ${errorText}`);
+            throw new Error(`Submission failed: ${errorText}`);
+          }
         }
+
+        // No error - proceed with confirmation
+        // Click Yes on the confirmation modal
+        console.log('    • Confirming submission...');
+        await page.getByRole('button', { name: 'Yes' }).click();
+        await page.waitForTimeout(1500); // Wait for save to complete
+
+        // Check for success
+        console.log('  ✓ Entry submitted successfully!');
+        successCount++;
+
+        // Brief pause before next entry
+        await page.waitForTimeout(1000);
       }
-
-      // No error - proceed with confirmation
-      // Click Yes on the confirmation modal
-      console.log('    • Confirming submission...');
-      await page.getByRole('button', { name: 'Yes' }).click();
-      await page.waitForTimeout(1500); // Wait for save to complete
-
-      // Check for success
-      console.log('  ✓ Entry submitted successfully!');
-      successCount++;
-
-      // Brief pause before next entry
-      await page.waitForTimeout(1000);
     }
 
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`✓ Automation complete!`);
-    console.log(`  Submitted: ${successCount} of ${datesToProcess.length} entries`);
+    console.log(`  Submitted: ${successCount} of ${totalEntries} entries (${datesToProcess.length} days × 2 slots)`);
     if (skippedCount > 0) {
       console.log(`  Skipped:   ${skippedCount} (duplicates already existed)`);
     }

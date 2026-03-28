@@ -160,8 +160,9 @@ The automation script (`submit-punchcards.spec.ts`) performs the following steps
    - Fills out the punch card form:
      - Client: Types the client name and selects the autocomplete result
      - Date: Enters the date being processed (MM/DD/YYYY)
-     - Check In: Configured time (default: 3:30 PM)
-     - Check Out: Configured time (default: 7:30 PM)
+     - Two time slots per day:
+       - Slot 1: Check In 6:30 AM, Check Out 7:30 AM
+       - Slot 2: Check In 3:30 PM, Check Out 6:30 PM
      - Adds reason: "Forgot to Clock In"
      - Adds reason: "Forgot to Clock Out"
    - Clicks Save (`#btnSubmitTransactionForm`)
@@ -236,7 +237,7 @@ npx playwright codegen
   - Employee automation calculates current/most recent week's Monday-Friday dates by default
   - Automatically skips weekends (Saturday/Sunday)
   - Supports custom date ranges via environment variables
-- **Time Consistency**: Employee entries always use 3:30 PM - 7:30 PM shift
+- **Time Consistency**: Employee entries use two daily shifts: 6:30 AM - 7:30 AM and 3:30 PM - 6:30 PM
 
 ## Troubleshooting
 
